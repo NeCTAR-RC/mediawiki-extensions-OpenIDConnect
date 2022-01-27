@@ -170,8 +170,11 @@ class OpenIDConnect extends PluggableAuth {
 					$oidc->getAccessTokenPayload()
 				);
 
-				$username = $this->getName( $this->subject, $this->issuer );
-				if ( !is_null( $username ) ) {
+				list( $id, $username ) =
+				$this->findUser( $this->subject, $this->issuer );
+				if ( $id !== null ) {
+					wfDebugLog( 'OpenID Connect',
+						'Found user with matching subject and issuer.' . PHP_EOL );
 					return true;
 				}
 
